@@ -1,6 +1,14 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let genAI: GoogleGenAI | null = null;
+
+const getGenAI = () => {
+  if (!genAI) {
+    const apiKey = process.env.GEMINI_API_KEY || "";
+    genAI = new GoogleGenAI(apiKey);
+  }
+  return genAI;
+};
 
 export interface CustomSection {
   id: string;
@@ -67,6 +75,7 @@ export const refineResumeContent = async (data: ResumeData): Promise<ResumeData>
   `;
 
   try {
+    const ai = getGenAI();
     const response = await ai.models.generateContent({
       model: "gemini-3-flash-preview",
       contents: prompt,
