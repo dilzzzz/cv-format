@@ -4,7 +4,7 @@ let genAI: GoogleGenAI | null = null;
 
 const getGenAI = () => {
   if (!genAI) {
-    const apiKey = process.env.GEMINI_API_KEY || "";
+    const apiKey = (typeof process !== 'undefined' && process.env ? process.env.GEMINI_API_KEY : '') || "";
     genAI = new GoogleGenAI({ apiKey });
   }
   return genAI;
